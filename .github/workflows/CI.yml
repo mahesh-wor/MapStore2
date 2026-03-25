@@ -22,21 +22,42 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11.x'
-          server-id: geosolutions
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
 
-      - name: Publish maven packages (TEST)
+      - name: Configure Maven and SSH
         run: |
-          mkdir -p ~/.ssh && chmod 700 ~/.ssh
-          # Testing the NEW host
+          # 1. Setup the Private Key
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GS_MAVEN_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H maven.geosolutionsgroup.com >> ~/.ssh/known_hosts
+
+          # 2. Generate a custom settings.xml
+          # We place the SSH config inside the <server> block 
+          # so the default Maven Wagon (JSch) sees it.
+          cat <<EOF > ${{ github.workspace }}/deploy-settings.xml
+          <settings>
+            <servers>
+              <server>
+                <id>geosolutions</id>
+                <username>${{ secrets.GS_MAVEN_USERNAME }}</username>
+                <privateKey>/home/runner/.ssh/id_rsa</privateKey>
+                <configuration>
+                  <sshConfig>
+                    <IdentitiesOnly>yes</IdentitiesOnly>
+                    <KexAlgorithms>+diffie-hellman-group1-sha1</KexAlgorithms>
+                  </sshConfig>
+                </configuration>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
+      - name: Publish maven packages
+        run: |
+          # Use -s to point to our custom settings file
+          mvn clean install deploy -f java/pom.xml \
+            -DskipTests -X \
+            -s ${{ github.workspace }}/deploy-settings.xml
           
-          # Use -DskipTests to make it lightning fast
-          # and -X if you need to see full debug logs for the SFTP transfer
-          mvn clean install deploy -f java/pom.xml -DskipTests -X
-          
-          mvn deploy --non-recursive -DskipTests -X
-        env:
-          MAVEN_USERNAME: ${{ secrets.GS_MAVEN_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.GS_MAVEN_PASSWORD }}
+          mvn deploy --non-recursive -DskipTests -X \
+            -s ${{ github.workspace }}/deploy-settings.xml
