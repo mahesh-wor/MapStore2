@@ -116,7 +116,7 @@
                         <configuration>
                             <target>
                                 <echo message="Downloading JRE..." />
-                                <get src="https://maven.geo-solutions.it/jdk/17.0.13/jdk_17.0.13.tar.gz" dest="${project.build.directory}/jre.tar.gz" />
+                                <get src="https://maven.geosolutionsgroup.com/jdk/17.0.13/jdk_17.0.13.tar.gz" dest="${project.build.directory}/jre.tar.gz" />
                                 <echo message="Untar JRE..." />
                                 <gunzip src="${project.build.directory}/jre.tar.gz" dest="${project.build.directory}/jre.tar" />
                                 <untar src="${project.build.directory}/jre.tar" dest="${project.build.directory}/jre" />

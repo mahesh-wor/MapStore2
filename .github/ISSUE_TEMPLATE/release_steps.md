@@ -13,9 +13,9 @@ This steps have to be followed always when preparing a new release.
 - [x] Create an issue with this checklist in the release milestone, named "Release YYYY.XX.mm".
 - [ ] Create the milestone if it doesn't exist. (Name YYYY.XX.mm).
 - [ ] Verify if it is needed to release a new version of `http_proxy`, `mapfish-print` or `geostore`, and do it if necessary accordingly with [release calendar](https://github.com/geosolutions-it/MapStore2/wiki/MapStore-Release-Calendars).
-  - [ ] for `geostore`, check if [here](https://maven.geo-solutions.it/it/geosolutions/geostore/geostore-webapp/) is present the version specified. Release procedure is specified in the [Readme.md](https://github.com/geosolutions-it/geostore) file of the project.
-  - [ ] for `http_proxy`, check if [here](https://maven.geo-solutions.it/proxy/http_proxy/) is present the version specified. Release procedure is specified in the [Readme.md](https://github.com/geosolutions-it/http-proxy) file of the project.
-  - [ ] for `mapfish-print` check if [here](https://maven.geo-solutions.it/proxy/http_proxy/) is present the version specified. Release procedure is specified in the [Readme.md](https://github.com/geosolutions-it/mapfish-print) file of the project.
+  - [ ] for `geostore`, check if [here](https://maven.geosolutionsgroup.com/it/geosolutions/geostore/geostore-webapp/) is present the version specified. Release procedure is specified in the [Readme.md](https://github.com/geosolutions-it/geostore) file of the project.
+  - [ ] for `http_proxy`, check if [here](https://maven.geosolutionsgroup.com/proxy/http_proxy/) is present the version specified. Release procedure is specified in the [Readme.md](https://github.com/geosolutions-it/http-proxy) file of the project.
+  - [ ] for `mapfish-print` check if [here](https://maven.geosolutionsgroup.com/proxy/http_proxy/) is present the version specified. Release procedure is specified in the [Readme.md](https://github.com/geosolutions-it/mapfish-print) file of the project.
 - [ ] Check if dependencies of MapStore libraries and geostore libraries are the same (compare `src/pom.xml` in geostore e `pom.xml` in MapStore).
 - [ ] Check if dependencies of the **template projects** are aligned
   - [ ] `project/standard/templates/pom.xml` are aligned as the ones in `pom.xml` of MapStore

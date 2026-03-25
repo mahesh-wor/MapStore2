@@ -171,7 +171,7 @@
    <distributionManagement>
         <repository>
             <id>geosolutions</id>
-            <url>sftp://maven.geo-solutions.it/</url>
+            <url>sftp://maven.geosolutionsgroup.com/</url>
         </repository>
     </distributionManagement>
     <profiles>
@@ -181,7 +181,7 @@
         <repository>
             <id>geosolutions</id>
             <name>GeoSolutions Repository</name>
-            <url>https://maven.geo-solutions.it</url>
+            <url>https://maven.geosolutionsgroup.com</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
