@@ -42,10 +42,7 @@ jobs:
                 <username>${{ secrets.GS_MAVEN_USERNAME }}</username>
                 <privateKey>/home/runner/.ssh/id_rsa</privateKey>
                 <configuration>
-                  <sshConfig>
-                    <IdentitiesOnly>yes</IdentitiesOnly>
-                    <KexAlgorithms>+diffie-hellman-group1-sha1</KexAlgorithms>
-                  </sshConfig>
+                  <strictHostKeyChecking>no</strictHostKeyChecking>
                 </configuration>
               </server>
             </servers>
