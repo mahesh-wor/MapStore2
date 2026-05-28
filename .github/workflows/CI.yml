@@ -17,41 +17,27 @@ jobs:
       - name: "checking out"
         uses: actions/checkout@v3
 
-      - name: "setting up Java"
-        uses: actions/setup-java@v3
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.9.0
         with:
+          ssh-private-key: ${{ secrets.GS_MAVEN_SSH_KEY }}
+
+      - name: Trust Geosolutions Host
+        run: ssh-keyscan -H maven.geosolutionsgroup.com >> ~/.ssh/known_hosts
+
+      - name: Set up JDK and Maven Settings
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17' # Update to your specific Java version
           distribution: 'temurin'
-          java-version: '11.x'
-
-      - name: Configure Maven and SSH
-        run: |
-          # 1. Setup the Private Key
-          mkdir -p ~/.ssh
-          echo "${{ secrets.GS_MAVEN_SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H maven.geosolutionsgroup.com >> ~/.ssh/known_hosts
-
-          # 2. Generate a custom settings.xml
-          # We place the SSH config inside the <server> block 
-          # so the default Maven Wagon (JSch) sees it.
-          cat <<EOF > ${{ github.workspace }}/deploy-settings.xml
-          <settings>
-            <servers>
-              <server>
-                <id>geosolutions</id>
-                <username>${{ secrets.GS_MAVEN_USERNAME }}</username>
-                <privateKey>/home/runner/.ssh/id_rsa</privateKey>
-              </server>
-            </servers>
-          </settings>
-          EOF
+          server-id: geosolutions
+          server-username: GS_USERNAME # This tells Maven to look for an env var named $GS_USERNAME
 
       - name: Publish maven packages
+        env:
+          # actions/setup-java will read this environment variable and use it for the 'geosolutions' server ID
+          GS_USERNAME: ${{ secrets.GS_MAVEN_USERNAME }}
         run: |
-          # Use -s to point to our custom settings file
-          mvn clean install deploy -f java/pom.xml \
-            -DskipTests -X \
-            -s ${{ github.workspace }}/deploy-settings.xml
-          
-          mvn deploy --non-recursive -DskipTests -X \
-            -s ${{ github.workspace }}/deploy-settings.xml
+          # No need to specify -s, setup-java puts the generated settings.xml in the default ~/.m2/ location
+          mvn clean install deploy -f java/pom.xml -DskipTests -X
+          mvn deploy --non-recursive -DskipTests -X
