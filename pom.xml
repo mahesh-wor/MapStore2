@@ -397,7 +397,7 @@
    <distributionManagement>
         <repository>
             <id>geosolutions</id>
-            <url>sftp://maven.geosolutionsgroup.com/</url>
+            <url>scpexe://maven.geosolutionsgroup.com/</url>
         </repository>
     </distributionManagement>
 
